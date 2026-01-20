@@ -1,4 +1,4 @@
-# 🎬 Anime Notifier Bot
+![Bot Interface](image.png)
 
 Interactive Telegram bot for anime search and automatic notifications about new episodes.
 
