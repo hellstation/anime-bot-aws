@@ -1,4 +1,4 @@
-# 🎬 Anime Notifier Bot
+![Bot Interface](image.png)
 
 Interactive Telegram bot for anime search and automatic notifications about new episodes.
 
@@ -48,17 +48,7 @@ aws s3api put-bucket-versioning \
   --versioning-configuration Status=Enabled
 ```
 
-#### Find VPC and Subnets
-1. Go to **AWS Console → VPC → Subnets**
-2. Select **2 subnets from same VPC** in `eu-north-1` region
-3. Copy **Subnet ID** (e.g.: `subnet-12345678`)
 
-#### Create Security Group
-1. Go to **AWS Console → EC2 → Security Groups**
-2. **Create security group**:
-   - Name: `anime-notifier-sg`
-   - VPC: select VPC from previous step
-   - Inbound rules: add `All traffic` (for testing)
 
 ### 3. Configure GitHub Secrets
 
@@ -72,9 +62,6 @@ Add these secrets:
 | `AWS_SECRET_ACCESS_KEY` | AWS Secret Access Key | AWS Console → IAM → Users → Security credentials |
 | `TELEGRAM_BOT_TOKEN` | Telegram bot token | @BotFather → /newbot |
 | `TELEGRAM_CHAT_ID` | Chat ID for notifications | Send message to bot, then `https://api.telegram.org/bot<TOKEN>/getUpdates` |
-| `SUBNET_1` | First subnet ID | AWS Console → VPC → Subnets |
-| `SUBNET_2` | Second subnet ID | AWS Console → VPC → Subnets (same VPC) |
-| `SECURITY_GROUP_ID` | Security Group ID | AWS Console → EC2 → Security Groups |
 
 ### 4. Deploy
 
@@ -150,6 +137,7 @@ Several hundred years ago, humans were nearly...
 │   ├── variables.tf      # Variables
 │   ├── outputs.tf        # Outputs
 │   └── modules/          # Terraform modules
+│       ├── network/      # VPC, subnets, security groups
 │       ├── secrets/      # AWS Secrets Manager
 │       ├── ecr/          # Elastic Container Registry
 │       ├── ecs/          # ECS Fargate

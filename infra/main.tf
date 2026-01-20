@@ -1,3 +1,10 @@
+module "network" {
+  source = "./modules/network"
+
+  vpc_cidr           = var.vpc_cidr
+  availability_zones = var.availability_zones
+}
+
 module "secrets" {
   source = "./modules/secrets"
 
@@ -34,6 +41,6 @@ module "ecs" {
   secret_arn         = module.secrets.secret_arn
   log_group_name     = module.logs.log_group_name
   aws_region         = var.aws_region
-  subnets            = var.subnets
-  security_group_id  = var.security_group_id
+  subnets            = module.network.public_subnets
+  security_group_id  = module.network.security_group_id
 }
