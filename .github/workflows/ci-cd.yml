@@ -1,0 +1,65 @@
+name: CI-CD
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: eu-north-1
+
+    - uses: hashicorp/setup-terraform@v3
+
+    - name: Create S3 bucket for Terraform state
+      run: |
+        if ! aws s3 ls s3://anime-notifier-terraform-state --region eu-north-1 2>/dev/null; then
+          aws s3 mb s3://anime-notifier-terraform-state --region eu-north-1
+          aws s3api put-bucket-versioning \
+            --bucket anime-notifier-terraform-state \
+            --versioning-configuration Status=Enabled
+        fi
+
+    - name: Terraform Init
+      working-directory: infra
+      run: terraform init
+
+    - name: Terraform Plan
+      working-directory: infra
+      run: |
+        terraform plan -var="telegram_bot_token=${{ secrets.TELEGRAM_BOT_TOKEN }}" \
+                       -var="telegram_chat_id=${{ secrets.TELEGRAM_CHAT_ID }}" \
+                       -var="subnets=[\"${{ secrets.SUBNET_1 }}\", \"${{ secrets.SUBNET_2 }}\"]" \
+                       -var="security_group_id=${{ secrets.SECURITY_GROUP_ID }}"
+
+    - name: Terraform Apply
+      working-directory: infra
+      run: |
+        terraform apply -auto-approve \
+                        -var="telegram_bot_token=${{ secrets.TELEGRAM_BOT_TOKEN }}" \
+                        -var="telegram_chat_id=${{ secrets.TELEGRAM_CHAT_ID }}" \
+                        -var="subnets=[\"${{ secrets.SUBNET_1 }}\", \"${{ secrets.SUBNET_2 }}\"]" \
+                        -var="security_group_id=${{ secrets.SECURITY_GROUP_ID }}"
+
+    - name: Get ECR URI
+      id: ecr
+      working-directory: infra
+      run: |
+        ECR_URI=$(terraform output -raw ecr_repository_url)
+        echo "ecr_uri=$ECR_URI" >> $GITHUB_OUTPUT
+
+    - uses: aws-actions/amazon-ecr-login@v2
+
+    - name: Build and push
+      run: |
+        docker build -t anime-notifier -f docker/Dockerfile .
+        docker tag anime-notifier:latest ${{ steps.ecr.outputs.ecr_uri }}:latest
+        docker push ${{ steps.ecr.outputs.ecr_uri }}:latest
