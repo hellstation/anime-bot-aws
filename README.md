@@ -1,17 +1,30 @@
+#  anime-bot-aws
 ![Bot Interface](image.png)
 
-Interactive Telegram bot for anime search and automatic notifications about new episodes.
+Telegram bot built with Python and deployed on AWS ECS Fargate. Provides real-time anime search capabilities and automated notifications for new episode releases using the AniList GraphQL API.
 
-## ✨ Features
+##  Features
 
-- 🔍 **Anime Search** - just type anime name in English
-- 📺 **Auto Notifications** - alerts for new episodes every hour
-- 🎯 **Detailed Info** - status, episodes, genres, rating, description
-- ☁️ **Cloud-native** - runs on AWS ECS Fargate
-- 🔐 **Secure Storage** - secrets in AWS Secrets Manager
-- 🚀 **CI/CD** - automated deployment via GitHub Actions
+-  **Intelligent Anime Search** - Search by English titles with fuzzy matching
+-  **Automated Notifications** - Hourly checks for new episodes across followed anime
+-  **Comprehensive Information** - Status, episodes, genres, ratings, and detailed descriptions
+-  **Serverless Architecture** - Fully managed AWS ECS Fargate deployment
+-  **Secure Secrets Management** - AWS Secrets Manager for sensitive data
+-  **Automated CI/CD** - GitHub Actions for seamless deployment
+-  **Real-time Monitoring** - CloudWatch logs and metrics
+-  **Infrastructure as Code** - Terraform modules for reproducible deployments
 
-## 🏗️ Architecture
+##  Technologies
+
+- **Backend**: Python 3.9+
+- **Bot Framework**: Custom Telegram Bot API integration (requests)
+- **API Integration**: AniList GraphQL API
+- **Infrastructure**: Terraform, AWS (ECS, ECR, VPC, Secrets Manager)
+- **Containerization**: Docker
+- **CI/CD**: GitHub Actions
+- **State Management**: JSON file-based persistence
+
+##  Architecture
 
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
@@ -23,13 +36,13 @@ Interactive Telegram bot for anime search and automatic notifications about new 
 └─────────────────┘    └─────────────────┘    └─────────────────┘
 ```
 
-## 📋 Prerequisites
+##  Prerequisites
 
 - AWS account with admin permissions
 - Telegram bot token ([create with @BotFather](https://t.me/botfather))
 - GitHub account for CI/CD
 
-## 🚀 Quick Start
+##  Quick Start
 
 ### 1. Clone Repository
 
@@ -73,12 +86,12 @@ git push origin main
 ```
 
 GitHub Actions automatically:
-1. ✅ Validates code
-2. ✅ Creates S3 bucket (if needed)
-3. ✅ Runs Terraform (plan + apply)
-4. ✅ Builds Docker image
-5. ✅ Pushes to ECR
-6. ✅ Updates ECS service
+1.  Validates code
+2.  Creates S3 bucket (if needed)
+3.  Runs Terraform (plan + apply)
+4.  Builds Docker image
+5.  Pushes to ECR
+6.  Updates ECS service
 
 ### 5. Test
 
@@ -92,7 +105,7 @@ GitHub Actions automatically:
 - **CloudWatch → Log groups** - logs in `/ecs/anime-notifier`
 - **Secrets Manager** - secrets in `anime-notifier-secrets`
 
-## 📱 Usage
+##  Usage
 
 ### Commands:
 - `/start` - welcome message
@@ -103,26 +116,25 @@ GitHub Actions automatically:
 ```
 Naruto
 /anime Attack on Titan
-Death Note
 /anime My Hero Academia
 ```
 
 ### Response Format:
 ```
-🎬 Attack on Titan
+ Attack on Titan
 
-📊 Status: Finished
-📅 Season: Fall 2013
-🎞️ Episodes: 87
-🏷️ Genres: Action, Drama, Suspense
-⭐ Score: 95/100
-📺 Next Episode: - (finished)
+ Status: Finished
+ Season: Fall 2013
+ Episodes: 87
+ Genres: Action, Drama, Suspense
+ Score: 95/100
+ Next Episode: - (finished)
 
-📝 Description:
+ Description:
 Several hundred years ago, humans were nearly...
 ```
 
-## 🛠️ Project Structure
+##  Project Structure
 
 ```
 ├── app/                    # Python app
@@ -149,7 +161,7 @@ Several hundred years ago, humans were nearly...
 └── README.md            # This documentation
 ```
 
-## 🔧 Development
+##  Development
 
 ### Local Testing:
 
@@ -161,14 +173,14 @@ cp .env.example .env
 docker-compose up --build
 ```
 
-## 🔒 Security
+##  Security
 
-- 🔐 **Secrets Manager** - tokens stored in AWS Secrets Manager
-- 🚫 **No hardcode** - all secrets in variables
-- 🔑 **IAM roles** - minimal required permissions
-- 📊 **Logging** - all actions logged in CloudWatch
+-  **Secrets Manager** - tokens stored in AWS Secrets Manager
+-  **No hardcode** - all secrets in variables
+-  **IAM roles** - minimal required permissions
+-  **Logging** - all actions logged in CloudWatch
 
-## 📊 Monitoring
+##  Monitoring
 
 - **CloudWatch Logs** - app logs
 - **CloudWatch Metrics** - ECS metrics
