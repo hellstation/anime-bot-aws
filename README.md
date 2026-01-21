@@ -1,8 +1,6 @@
 #  anime-bot-aws
 ![Bot Interface](image.png)
 
-Telegram bot built with Python and deployed on AWS ECS Fargate. Provides real-time anime search capabilities and automated notifications for new episode releases using the AniList GraphQL API.
-
 ##  Features
 
 -  **Intelligent Anime Search** - Search by English titles with fuzzy matching
